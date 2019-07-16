@@ -15,8 +15,6 @@ Then install this package
 
 This package makes use of two packages in order to allow Fmincon to be called from Julia.  The first, [MATLAB.jl](https://github.com/JuliaInterop/MATLAB.jl) allows MATLAB to be called from Julia using the Matlab engine.  The second, [Mex.jl](https://github.com/taylormcd/Mex.jl) embeds Julia in the MATLAB process through the Mex interface. Using these packages the following relationship can be constructed.
 
-          MATLAB ENGINE                  MEX
-Julia <-------------------> MATLAB <-------------> Embedded Julia
+Julia <--- (MATLAB ENGINE) ---> MATLAB <--- (MEX Interface) ---> Embedded Julia
 
-
-Embedded Julia has no knowledge of the functions and variables defined in the main Julia process and can only interact through MATLAB with the main Julia process, therefore, Julia functions cannot be passed directly to/from the two Julia sessions.  To overcome this hurdle, a filename is passed which defines the objective/constraint function along with the name of the objective/constraint function.  Embedded Julia can therefore learn about these functions for itself, and since it is embedded, the functions in embedded Julia may be called freely by MATLAB.
+The Mex interface allows Julia functions to be wrapped in MATLAB function handles, whereas the MATLAB engine interface does not.  Therefore Julia callbacks need to be performed by Embedded Julia.  However, since MATLAB stands between Julia and Embedded Julia, a function cannot be directly passed from one to the other.  Therefore Julia instead passes Embedded Julia a file which defines the necessary function and the name of the function.  Embedded Julia then parses the function and MATLAB wraps the function in a MATLAB function handle.
