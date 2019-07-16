@@ -13,8 +13,7 @@ function fmincon(file::String, usrfun::String, x0::AbstractArray{<:Real,1},
     msession = MSession()
 
     # add matlab optimization function to the MATLAB path
-    moptimpath = joinpath(pwd(), "..", "src")
-    # moptimpath = joinpath(dirname(pathof(Main.Fmincon)), "src", "optimize.m")
+    moptimpath = dirname(pathof(Fmincon))
     eval_string(msession, "addpath('$moptimpath');")
 
     # # copy input variables to MATLAB session
