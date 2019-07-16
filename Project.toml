@@ -1,0 +1,8 @@
+name = "Fmincon"
+uuid = "e17f865c-a73d-11e9-1c8f-cdf520c7b7e5"
+authors = ["Taylor McDonnell <taylor.golden.mcdonnell@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+MATLAB = "10e44e05-a98a-55b3-a45b-ba969058deb6"
+Mex = "5e29dd5e-a72c-11e9-2bb7-cd1b1701caa7"
