@@ -2,7 +2,7 @@ module Fmincon
 
 using MATLAB
 
-function fmincon(file::String, usrfun::String, x0::AbstractArray{<:Real,1},
+function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     lb::AbstractArray{<:Real,1}, ub::AbstractArray{<:Real,1};
     options::AbstractDict=Dict(),
     A::AbstractArray{<:Real,2}=zeros(0,0), b::AbstractArray{<:Real,1}=zeros(0),
@@ -16,22 +16,46 @@ function fmincon(file::String, usrfun::String, x0::AbstractArray{<:Real,1},
     moptimpath = dirname(pathof(Fmincon))
     eval_string(msession, "addpath('$moptimpath');")
 
+    # make sure inputs are compatible with MATLAB
+    x0_m = Float64.(x0)
+    A_m = Float64.(A)
+    b_m = Float64.(b)
+    Aeq_m = Float64.(Aeq)
+    beq_m = Float64.(beq)
+    lb_m = Float64.(lb)
+    ub_m = Float64.(ub)
+    options_m = Dict{String, Any}()
+    for key in keys(options)
+        if isa(options[key], Number)
+            options_m[key] = Float64.(options[key])
+        else
+            options_m[key] = options[key]
+        end
+    end
+    gradients_m = Bool(gradients)
+
     # # copy input variables to MATLAB session
-    put_variable(msession, :x0, x0)
-    put_variable(msession, :A, A)
-    put_variable(msession, :b, b)
-    put_variable(msession, :Aeq, Aeq)
-    put_variable(msession, :beq, beq)
-    put_variable(msession, :lb, lb)
-    put_variable(msession, :ub, ub)
-    put_variable(msession, :options, options)
-    put_variable(msession, :gradients, gradients)
+    put_variable(msession, :x0, x0_m)
+    put_variable(msession, :A, A_m)
+    put_variable(msession, :b, b_m)
+    put_variable(msession, :Aeq, Aeq_m)
+    put_variable(msession, :beq, beq_m)
+    put_variable(msession, :lb, lb_m)
+    put_variable(msession, :ub, ub_m)
+    put_variable(msession, :options, options_m)
+    put_variable(msession, :gradients, gradients_m)
 
     # load embedded julia session and this package
     eval_string(msession, "jl.eval('using MATLAB');")
 
     # load objective/constraint function into embedded Julia
-    eval_string(msession, "jl.include('$file');")
+    if isfile(fundef)
+        eval_string(msession, "jl.include('$fundef');")
+    else
+        eval_string(msession, "jl.eval('$fundef');")
+    end
+
+    nargout = gradients ? 6 : 3
 
     # make user function MEX-like
     mexusrfun =
@@ -39,14 +63,13 @@ function fmincon(file::String, usrfun::String, x0::AbstractArray{<:Real,1},
         jl.eval(...
             ['function mexusrfun(prhs)' newline...
              '    args = jvalue(prhs[1])' newline...
-             '    outs = $usrfun(args)' newline...
-             '    return [Float64.(out) for out in outs]' newline...
+             '    outs = $fun(args)' newline...
+             '    return [Float64.(outs[i]) for i=1:$nargout]' newline...
              'end']);
         """
     eval_string(msession, mexusrfun)
 
     # create a function handle for the user function
-    nargout = gradients ? 6 : 3
     eval_string(msession, "mexusrfun = jl.wrapmex('mexusrfun', $nargout);")
 
     # perform optimization
