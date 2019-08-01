@@ -45,9 +45,6 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     put_variable(msession, :options, options_m)
     put_variable(msession, :gradients, gradients_m)
 
-    # load embedded julia session and this package
-    eval_string(msession, "jl.eval('using MATLAB');")
-
     # load objective/constraint function into embedded Julia
     if isfile(fundef)
         eval_string(msession, "jl.include('$fundef');")
