@@ -33,7 +33,7 @@ uuid = "d6f4376e-aef5-505a-96c1-9c027394607a"
 deps = ["Libdl", "MATLAB", "Printf"]
 git-tree-sha1 = "4634776a9edffe72f7b7731aef447d87f53a5bf2"
 repo-rev = "master"
-repo-url = "https://github.com/taylormcd/Mex.jl"
+repo-url = "https://github.com/byuflowlab/Mex.jl"
 uuid = "5e29dd5e-a72c-11e9-2bb7-cd1b1701caa7"
 version = "0.1.0"
 
