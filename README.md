@@ -6,6 +6,8 @@ First ensure that you have access to MATLAB and MATLAB's Optimization Toolbox.
 
 Then follow the instructions for installing the [MATLAB.jl](https://github.com/JuliaInterop/MATLAB.jl) package
 
+Then follow the instructions for installing the [Mex.jl](https://github.com/byuflowlab/Mex.jl) package
+
 Then install this package
 ```
 ]add https://github.com/taylormcd/Fmincon.jl
