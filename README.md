@@ -10,7 +10,7 @@ Then follow the instructions for installing the [Mex.jl](https://github.com/byuf
 
 Then install this package
 ```
-]add https://github.com/taylormcd/Fmincon.jl
+]add https://github.com/byuflowlab/Fmincon.jl
 ```
 
 # How this package handles functions callbacks
