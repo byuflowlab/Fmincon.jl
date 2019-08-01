@@ -8,9 +8,9 @@ Then follow the instructions for installing the [MATLAB.jl](https://github.com/J
 
 Then follow the instructions for installing the [Mex.jl](https://github.com/byuflowlab/Mex.jl) package
 
-Then install this package
+Then install this package from the Julia package manager
 ```
-]add https://github.com/byuflowlab/Fmincon.jl
+(1.0) pkg> add https://github.com/byuflowlab/Fmincon.jl
 ```
 
 ## How this package handles functions callbacks
