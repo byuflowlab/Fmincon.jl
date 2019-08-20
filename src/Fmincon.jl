@@ -9,8 +9,8 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     Aeq::AbstractArray{<:Real,2}=zeros(0,0), beq::AbstractArray{<:Real,1}=zeros(0),
     gradients::Bool=false, printfile::String="")
 
-    # start a MATLAB session
-    msession = MSession()
+    # get the default matlab session
+    msession = MATLAB.get_default_msession()
 
     # add matlab optimization function to the MATLAB path
     moptimpath = dirname(pathof(Fmincon))
