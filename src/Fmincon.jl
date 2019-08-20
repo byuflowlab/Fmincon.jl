@@ -73,7 +73,7 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     eval_string(msession, "[xopt, fopt, exitflag, output] = optimize(mexusrfun, x0, A, b, Aeq, beq, lb, ub, options, gradients, '$printfile');")
 
     # copy output variables from MATLAB session
-    xopt = jvalue(get_mvariable(msession, :xopt))
+    xopt = vec(jarray(get_mvariable(msession, :xopt)))
     fopt = jvalue(get_mvariable(msession, :fopt))
     exitflag = jvalue(get_mvariable(msession, :exitflag))
     output = jvalue(get_mvariable(msession, :output))
