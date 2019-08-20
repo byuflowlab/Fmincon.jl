@@ -78,9 +78,6 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     exitflag = jvalue(get_mvariable(msession, :exitflag))
     output = jvalue(get_mvariable(msession, :output))
 
-    # close MATLAB session
-    close(msession)
-
     return xopt, fopt, exitflag, output
 
 end
