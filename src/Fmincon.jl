@@ -70,7 +70,7 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     eval_string(msession, "mexusrfun = jl.wrapmex('mexusrfun', $nargout);")
 
     # clear outputs
-    eval_string(msession, "clear xopt, fopt, exitflag, output")
+    eval_string(msession, "clear xopt fopt exitflag output")
 
     # perform optimization
     eval_string(msession, "[xopt, fopt, exitflag, output] = optimize(mexusrfun, x0, A, b, Aeq, beq, lb, ub, options, gradients, '$printfile');")
