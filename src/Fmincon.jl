@@ -76,7 +76,7 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     eval_string(msession, "[xopt, fopt, exitflag, output] = optimize(mexusrfun, x0, A, b, Aeq, beq, lb, ub, options, gradients, '$printfile');")
 
     # check if optimization was performed succesfully
-    eval_string(msession, "fail = exist(xopt) == 0;")
+    eval_string(msession, "fail = exist('xopt') == 0;")
     fail = jvalue(get_mvariable(msession, :fail))
 
     # throw error if it didn't, and redirect user to other error messages
