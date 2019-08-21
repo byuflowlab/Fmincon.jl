@@ -69,8 +69,20 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     # create a function handle for the user function
     eval_string(msession, "mexusrfun = jl.wrapmex('mexusrfun', $nargout);")
 
+    # clear outputs
+    eval_string(msession, "clear xopt, fopt, exitflag, output")
+
     # perform optimization
     eval_string(msession, "[xopt, fopt, exitflag, output] = optimize(mexusrfun, x0, A, b, Aeq, beq, lb, ub, options, gradients, '$printfile');")
+
+    # check if optimization was performed succesfully
+    eval_string(msession, "fail = exist(xopt) == 0;")
+    fail = jvalue(get_mvariable(msession, :fail)))
+
+    # throw error if it didn't, and redirect user to other error messages
+    if fail
+        error("An error occured during call to fmincon, see error messages from MATLAB and embedded Julia")
+    end
 
     # copy output variables from MATLAB session
     xopt = vec(jarray(get_mvariable(msession, :xopt)))
