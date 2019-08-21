@@ -77,7 +77,7 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
 
     # check if optimization was performed succesfully
     eval_string(msession, "fail = exist(xopt) == 0;")
-    fail = jvalue(get_mvariable(msession, :fail)))
+    fail = jvalue(get_mvariable(msession, :fail))
 
     # throw error if it didn't, and redirect user to other error messages
     if fail
