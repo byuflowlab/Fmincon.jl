@@ -67,7 +67,7 @@ function fmincon(fundef::String, fun::String, x0::AbstractArray{<:Real,1},
     eval_string(msession, mexusrfun)
 
     # create a function handle for the user function
-    eval_string(msession, "mexusrfun = jl.wrapmex('mexusrfun', $nargout);")
+    eval_string(msession, "mexusrfun = jl.wrapmex('mexusrfun');")
 
     # clear outputs
     eval_string(msession, "clear xopt fopt exitflag output")
